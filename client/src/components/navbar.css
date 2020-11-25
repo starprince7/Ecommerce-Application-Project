@@ -1,0 +1,20 @@
+.nav-wrapper img {
+    width: 32px;
+    margin: 20px;
+    border: solid white 1px;
+    border-radius: 50%;
+}
+
+.cart__num-wrapper {
+    display: flex;
+}
+
+.cart_number {
+    border-radius: 50%;
+    position: relative;
+    padding: 3px 8px;
+    width: fit-content;
+    max-height: 50px;
+    top: -15px;
+    left: -26px;
+}

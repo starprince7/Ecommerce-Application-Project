@@ -1,0 +1,27 @@
+.product__banner > img {
+  width: 100%;
+}
+
+.Product__image {
+  width: 100% !important;
+}
+
+.card-content > a {
+  font-size: 14px;
+}
+
+span.product__price {
+  font-weight: bold;
+}
+
+.product__button {
+  width: 100px;
+  font-size: 11px;
+  padding: 0 0px;
+  margin: 5px 0;
+  border-radius: 30px !important;
+}
+/* 
+  .product__card {
+      min-height: 275px;
+  } */
