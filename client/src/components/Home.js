@@ -60,8 +60,8 @@ function Home() {
                   <div className=" deep-purple-text darken-4"> {title} </div>
                 </Link>
                 <div className="card-action">
-                  <span className="product__price"><Naira>{price}</Naira></span>
-                  <div onClick={() => addToCart(id, title, image, price)}>
+                  <span className="product__price"><Naira>{price * 100}</Naira></span>
+                  <div onClick={() => addToCart(id, title, image, (price * 100))}>
                     <Link
                       className="btn-small product__button deep-purple darken-3 white-text waves-effect waves-light  z-depth-2"
                       to="#"

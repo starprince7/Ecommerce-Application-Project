@@ -69,53 +69,56 @@ function Total(props) {
     });
     console.log(paymentMethod || error);
 
-    const { id } = paymentMethod;
-
-    const Total = subTotal * 1000;
-
-    console.log("The Amount Passed=========>>>>", Total);
-
-    try {
-      const res = await Axios.post("/api/charges", { id, amount: Total });
-
-      // The "data" Object has the "client secret!"
-      const {data} = res
-      data && console.log("New Res>>>>>>>", res.data.message);
-      if (data) {
-        
-        try {
-          const response = await stripe.confirmCardPayment(data, {
-            payment_method: id,
-          })
-
-          stateDispatch({
-            type: "SET_LOADING",
-            payload: false,
-          });
-
-          console.log(
-            "From confirmed card======",
-            response.paymentIntent.status
-          );
-          
-          alert("Payment Successful!");
-          localStorage.removeItem("cart");
-          history.push("/");
-
-        }
-        catch (err) {
-          console.log("Error Response From server ===============>", err);
-        }
-
-
-
-      }
-    } catch (err) {
-      console.log("Check this error" ,err.message);
+    if (error) {
       stateDispatch({
         type: "SET_LOADING",
         payload: false,
       });
+      alert(error.message);
+    } else {
+      const { id } = paymentMethod;
+
+      const Total = subTotal * 100;
+
+      console.log("The Amount Passed=========>>>>", Total);
+
+      try {
+        const res = await Axios.post("/api/charges", { id, amount: Total });
+
+        // The "data" Object has the "client secret!"
+        const { data } = res;
+        data && console.log("New Res>>>>>>>", res.data.message);
+        if (data) {
+          try {
+            const response = await stripe.confirmCardPayment(data, {
+              payment_method: id,
+            });
+
+            stateDispatch({
+              type: "SET_LOADING",
+              payload: false,
+            });
+
+            console.log(
+              "From confirmed card======",
+              response.paymentIntent.status
+            );
+
+            alert("Payment Successful!");
+            localStorage.removeItem("cart");
+            history.push("/");
+          } catch (err) {
+            console.log("Error Response From server ===============>", err);
+          }
+        }
+      } catch (err) {
+        console.log("Check this error", err.message);
+        stateDispatch({
+          type: "SET_LOADING",
+          payload: false,
+        });
+      }
+
       // alert("Payment Error!");
     }
   };
@@ -190,9 +193,15 @@ function Total(props) {
             <img src={Stripe_logo} alt="stripe-logo" />
           </div>
           <div className="Test_details">
-          <p><strong>Note: use test card below to make payment!</strong></p>
-          <p><strong>4242 4242 4242 4242</strong></p>
-          <p><strong>MM-YY: 04/42, CVC: 424, ZIP: 100001</strong></p>
+            <p>
+              <strong>Note: use test card below to make payment!</strong>
+            </p>
+            <p>
+              <strong>4242 4242 4242 4242</strong>
+            </p>
+            <p>
+              <strong>MM-YY: 04/42, CVC: 424, ZIP: 100001</strong>
+            </p>
           </div>
         </form>
       </div>
