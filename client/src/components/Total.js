@@ -10,7 +10,7 @@ import Stripe_logo from "./img/stripe-pay.png";
 
 function Total(props) {
   const { cart, history } = props;
-  const { stateDispatch } = useContext(AppContext);
+  const { stateDispatch, cartDispatch } = useContext(AppContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -105,21 +105,20 @@ function Total(props) {
             );
 
             alert("Payment Successful!");
-            localStorage.removeItem("cart");
+            cartDispatch({type: 'CLEAR_CART'});
             history.push("/");
           } catch (err) {
             console.log("Error Response From server ===============>", err);
           }
         }
       } catch (err) {
-        console.log("Check this error", err.message);
+        console.log(err.message);
         stateDispatch({
           type: "SET_LOADING",
           payload: false,
         });
       }
 
-      // alert("Payment Error!");
     }
   };
 

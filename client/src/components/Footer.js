@@ -5,7 +5,7 @@ export default function Footer() {
         <footer class="page-footer  grey darken-4">
             <div className="footer_container">
                 <i>
-                    <p class="grey-text center lighten-2">&copy;Prince Agezi N.</p>
+                    <p className="grey-text center lighten-2">&copy;Prince Agezi N.</p>
                 </i>
             </div>
             <br></br>

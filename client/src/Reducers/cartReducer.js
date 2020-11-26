@@ -17,6 +17,8 @@ export const cartReducer = (state, action) => {
       return (state = increamentQty(state, action.payload));
     case "REDUCE_QUANTITY":
       return (state = decreamentQty(state, action.payload));
+    case 'CLEAR_CART':
+      return []
     default:
       return state;
   }
