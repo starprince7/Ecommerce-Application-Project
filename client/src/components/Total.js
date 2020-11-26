@@ -185,13 +185,14 @@ function Total(props) {
           >
             pay
           </button>
+          <br></br>
           <div className="stripe_logo_container">
             <img src={Stripe_logo} alt="stripe-logo" />
           </div>
           <div className="Test_details">
           <p><strong>Note: use test card below to make payment!</strong></p>
           <p><strong>4242 4242 4242 4242</strong></p>
-          <p><strong>CVC: 424, DATE: 04-04-24, ZIP: 100001</strong></p>
+          <p><strong>MM-YY: 04/42, CVC: 424, ZIP: 100001</strong></p>
           </div>
         </form>
       </div>
