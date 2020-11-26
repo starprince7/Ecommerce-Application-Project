@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import {AppContext}  from '../App'
+import { AppContext } from '../App'
+import Loading from './img/loading.gif'
 import './loader.css'
 
 export default function Loader() {
@@ -20,7 +21,7 @@ export default function Loader() {
   return (
     <div>
     <div className="background-loader">
-        <div id="loader"></div>
+            <img src={Loading} alt="loading" />
     </div>
     </div>
   );

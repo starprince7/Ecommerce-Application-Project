@@ -50,7 +50,7 @@ p {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    width: 170px;
+    width: 150px;
 
 }
 
@@ -73,6 +73,7 @@ p {
 .count,
 .increase-btn,
 .decrease-btn {
+    width: 50px;
     border-top: solid 1px #4527a0;
     border-bottom: solid 1px #4527a0;
     padding: 3px 10px;
@@ -81,13 +82,34 @@ p {
 
 .stripe_card_container {
     min-height: 90px;
-    border: solid silver 2px;
+    border: solid 1.5px silver;
+    border-radius: 4px;
 }
 
 form {
     padding: 10px;
 }
 
+
 form input::placeholder {
-    color: rgb(165, 146, 146);
+    color: rgb(197, 175, 175);
+}
+
+.card__form {
+    background-color: white!important;
+}
+
+
+.cart_empty_message {
+    max-width: 300px!important;
+    min-height: 250px!important;
+    margin: 10px auto;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cart_empty_message > p {
+    font-weight: 500;
 }

@@ -36,14 +36,14 @@ app.post('/api/charges', async (req, res) => {
     
     try { 
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.ceil(amount * 100),
+            amount: amount,
             currency: 'NGN'
         })
         log('Transcation Success Msg: ===', paymentIntent)
         res && res.status(200).send(paymentIntent.client_secret)
     }
     catch (err) {
-        log('Error making Payment! =================', err)
-        res.status(500).json({msg: err.message})
+        log('Error making Payment! =================', err.code)
+        res.send(err.raw)
     }
 })

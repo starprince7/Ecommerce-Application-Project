@@ -56,7 +56,7 @@ function Home() {
           <div className=" card medium z-depth-0 horizontal product__card">
             <div className="card-stacked">
               <div className="card-content">
-                <Link className="left-align" to={"/" + id}>
+                <Link className="left-align" to={"#"}>
                   <div className=" deep-purple-text darken-4"> {title} </div>
                 </Link>
                 <div className="card-action">

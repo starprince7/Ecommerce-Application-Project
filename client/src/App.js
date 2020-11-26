@@ -10,6 +10,7 @@ import { initState, productReducer } from "./Reducers/productsReducer";
 import { initCart, cartReducer } from "./Reducers/cartReducer";
 import Stripe from "./HOC/Stripe";
 import Loader from './components/Loader'
+import Footer from "./components/Footer";
 
 export const AppContext = React.createContext();
 
@@ -42,6 +43,7 @@ function App() {
               <Route path="/:user_id" component={PrivateRoute} />
             </Switch>
           </div>
+          < Footer />
         </BrowserRouter>
       </AppContext.Provider>
     </Stripe>

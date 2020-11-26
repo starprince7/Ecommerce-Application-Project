@@ -1,3 +1,8 @@
+title {
+  background-color: rgb(112, 0, 216);
+}
+
+
 .App {
   text-align: center;
 }
@@ -22,5 +27,15 @@ a {
   text-decoration: none;
   color: white;
   font-size: 20px;
+  font-weight: bold;
+}
+
+
+footer {
+  width: 100%;
+}
+
+footer p {
+  font-size: 13px;
   font-weight: bold;
 }

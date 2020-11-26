@@ -1,57 +1,56 @@
-import React, {useState, useContext } from 'react'
-import Naira from 'react-naira'
-import {withRouter} from 'react-router-dom'
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
-import {AppContext} from '../App'
+import React, { useState, useContext } from "react";
+import Naira from "react-naira";
+import { withRouter } from "react-router-dom";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { AppContext } from "../App";
 
-import './total.css'
-import Axios from 'axios';
-import Stripe_logo from './img/stripe-pay.png'
+import "./total.css";
+import Axios from "axios";
+import Stripe_logo from "./img/stripe-pay.png";
 
 function Total(props) {
   const { cart, history } = props;
-  const {stateDispatch} = useContext(AppContext)
+  const { stateDispatch } = useContext(AppContext);
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [country, setCountry] = useState('')
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("NG");
 
   const handleChangeName = (e) => {
     // console.log("event target=====",e.target.value)
-    setName(e.target.value)
-  }
+    setName(e.target.value);
+  };
   const handleChangeEmail = (e) => {
     // console.log("event target=====",e.target.value)
-    setEmail(e.target.value)
-  }
+    setEmail(e.target.value);
+  };
   const handleChangeCity = (e) => {
-
-    setCity(e.target.value)
-  }
+    setCity(e.target.value);
+  };
   const handleChangeState = (e) => {
-    setState(e.target.value)
-  }
+    setState(e.target.value);
+  };
   const handleChangeCountry = (e) => {
-    setCountry(e.target.value)
-  }
-    
+    setCountry(e.target.value);
+  };
+
   const subTotal = cart.reduce((acc, elem) => {
     if (elem.quantity >= 0) {
       return acc + elem.price * elem.quantity;
     } else return null;
   }, 0);
-  
-  const stripe = useStripe()
+
+  const stripe = useStripe();
   const elements = useElements();
- 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     stateDispatch({
-      type: 'SET_LOADING',
-      payload: true
-    })
+      type: "SET_LOADING",
+      payload: true,
+    });
 
     const billingDetails = {
       name,
@@ -59,78 +58,146 @@ function Total(props) {
       address: {
         city,
         state,
-        country
-      }
-    }
+        country,
+      },
+    };
 
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
-      type: 'card',
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
       card: elements.getElement(CardElement),
-      billing_details: billingDetails
+      billing_details: billingDetails,
     });
-    console.log(paymentMethod || error)
+    console.log(paymentMethod || error);
 
-    const { id } = paymentMethod
-    
+    const { id } = paymentMethod;
+
+    const Total = subTotal * 1000;
+
+    console.log("The Amount Passed=========>>>>", Total);
+
     try {
-      const { data } = await Axios.post('/api/charges', { id, amount: subTotal })
+      const res = await Axios.post("/api/charges", { id, amount: Total });
+
       // The "data" Object has the "client secret!"
-      data && console.log(data) 
+      const {data} = res
+      data && console.log("New Res>>>>>>>", res.data.message);
       if (data) {
-        const confirmCardPayment = await stripe.confirmCardPayment(data, {
-          payment_method: id
-        })
-        stateDispatch({
-          type: 'SET_LOADING',
-          payload: false
-        })
-        if (confirmCardPayment.paymentIntent.status) {
-          alert('Payment Successful!')
+        
+        try {
+          const response = await stripe.confirmCardPayment(data, {
+            payment_method: id,
+          })
+
+          stateDispatch({
+            type: "SET_LOADING",
+            payload: false,
+          });
+
+          console.log(
+            "From confirmed card======",
+            response.paymentIntent.status
+          );
+          
+          alert("Payment Successful!");
           localStorage.removeItem("cart");
-          history.push('/')
+          history.push("/");
+
         }
-        console.log( 'From confirmed card======',confirmCardPayment)
-        console.log( 'From confirmed card======',confirmCardPayment.paymentIntent.status)
+        catch (err) {
+          console.log("Error Response From server ===============>", err);
+        }
+
+
+
       }
-     }
-    catch (err) {
-      console.log(err)
+    } catch (err) {
+      console.log("Check this error" ,err.message);
+      stateDispatch({
+        type: "SET_LOADING",
+        payload: false,
+      });
+      // alert("Payment Error!");
     }
   };
 
-    return (
-        <div className="">
-           <div className="card z-depth-0 horizontal">
-           <h3>Subtotal: - <Naira>{subTotal}</Naira> </h3>
-           </div> 
-           <br></br>
-        <div className="stripe_card_container">
-          <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="your name" name="name" onChange={ handleChangeName } required />
-            <br></br>
-            <input type="text" placeholder="email" name="email" onChange={ handleChangeEmail } required />
-            <br></br>
-            <input type="text" placeholder="city" name="city" onChange={ handleChangeCity } required />
-            <br></br>
-            <input type="text" placeholder="state" name="state" onChange={ handleChangeState } required />
-            <br></br>
-            <input type="text" placeholder="Country Example ( NG )" name="country" onChange={handleChangeCountry}
-               maxLength="2" required
-            />
-            <br></br>
-            <CardElement />
-            <br></br>
-            <br></br>
-            <button className="btn-large  waves-effect waves-light green light-green darken-2 white-text" type="submit" disabled={!stripe}>
-              pay
-              </button>
-              <div className="stripe_logo_container">
-              <img src={Stripe_logo} alt="stripe-logo" />
-            </div>
-          </form>
-        </div>
-        </div>
-    )
+  return (
+    <div className="card__form">
+      <br></br>
+      <br></br>
+      <div className="card z-depth-0 horizontal">
+        <h4>
+          Subtotal: - <Naira>{subTotal}</Naira>{" "}
+        </h4>
+      </div>
+      <br></br>
+      <div className="stripe_card_container container">
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="name"
+            name="name"
+            onChange={handleChangeName}
+            required
+          />
+          <br></br>
+          <input
+            type="text"
+            placeholder="email"
+            name="email"
+            onChange={handleChangeEmail}
+            required
+          />
+          <br></br>
+          <input
+            type="text"
+            placeholder="city"
+            name="city"
+            onChange={handleChangeCity}
+            required
+          />
+          <br></br>
+          <input
+            type="text"
+            placeholder="state"
+            name="state"
+            onChange={handleChangeState}
+            required
+          />
+          <br></br>
+          <input
+            id="upper_case"
+            type="text"
+            value={country}
+            placeholder="Country Example ( NG )"
+            name="country"
+            onChange={handleChangeCountry}
+            maxLength="2"
+            required
+          />
+          <br></br>
+          <CardElement />
+          <br></br>
+          <br></br>
+          <button
+            className="btn-large  waves-effect waves-light green light-green darken-2 white-text"
+            type="submit"
+            disabled={!stripe}
+          >
+            pay
+          </button>
+          <div className="stripe_logo_container">
+            <img src={Stripe_logo} alt="stripe-logo" />
+          </div>
+          <div className="Test_details">
+          <p><strong>Note: use test card below to make payment!</strong></p>
+          <p><strong>4242 4242 4242 4242</strong></p>
+          <p><strong>CVC: 424, DATE: 04-04-24, ZIP: 100001</strong></p>
+          </div>
+        </form>
+      </div>
+      <br></br>
+    </div>
+  );
 }
 
 export default withRouter(Total);

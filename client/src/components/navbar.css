@@ -7,6 +7,13 @@
 
 .cart__num-wrapper {
     display: flex;
+}@media(max-width: 500px) {
+    .cart__num-wrapper {
+        position: fixed;
+        top: 10%;
+        right: 0px;
+        width: 85px;
+    }
 }
 
 .cart_number {
@@ -17,4 +24,8 @@
     max-height: 50px;
     top: -15px;
     left: -26px;
+}@media(max-width: 500px) {
+    .cart_number {
+        max-height: 45px;
+    }
 }

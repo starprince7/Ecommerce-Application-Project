@@ -7,7 +7,7 @@ function UserRoute(props) {
 
     useEffect(()=> {
         let id = props.match.params.user_id
-        Axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
+        Axios.get(`https://fakestoreapi.com/products/${id}`)
         .then(res => setPost(res.data))
     }, [])
 

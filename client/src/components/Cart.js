@@ -62,7 +62,7 @@ function Cart() {
             <div className="col s6 m6 l6">
               <div className="Quantity-btns">
               <div onClick={() => decreaseQty(id)} className="increase-btn deep-purple darken-2 white-text">-</div>
-              <div className="count">- {quantity} -</div>
+              <div className="count"> {quantity} </div>
               <div  onClick={() => increaseQty(id)} className="decrease-btn deep-purple darken-2 white-text">+</div>
               </div>
             </div>
@@ -91,7 +91,7 @@ function Cart() {
             </tbody>
           </table>
           ) : null}
-          {cart.length > 0 ? cartList : <p>You have no items in your cart!</p>}</div>
+          {cart.length > 0 ? cartList : <div className="cart_empty_message card"><p>You have no item in your cart!</p></div>}</div>
           {cart.length !== 0 ? <Total cart={cart} /> : null}
       </div>
     </div>
